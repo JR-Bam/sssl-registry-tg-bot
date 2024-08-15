@@ -75,26 +75,26 @@ async fn help(bot: &Bot, msg: &Message) -> ResponseResult<()> {
 }
 
 async fn start(bot: &Bot, msg: &Message) -> ResponseResult<()> {
-    let greeting_message = String::from("
-        Goon day everynyan :3\n
-        This is the SSSL Registry. Which stands for the:\n\n
-        🐕 S - Samoyed\n
-        🦦 S - Sable\n
-        🐆 SL - Snow Leopard\n
-        Registry, where you can fulfill your random SSSL needs!\n
-        To get started, simply type /help !!!
-    ");
+    let greeting_message = String::from(r#"
+    Goon day everynyan :3
+    This is the SSSL Registry. Which stands for the:
+    🐕 S - Samoyed
+    🦦 S - Sable
+    🐆 SL - Snow Leopard
+    Registry, where you can fulfill your random SSSL needs!
+    To get started, simply type /help !!!
+    "#);
 
     bot.send_message(msg.chat.id, greeting_message).await?;
     Ok(())
 }
 
 async fn about(bot: &Bot, msg: &Message) -> ResponseResult<()> {
-    let about_message = String::from("
-        Want to see the source code? Find it in the github repo!\n
-        https://github.com/JR-Bam/sssl-registry-tg-bot\n\n
-        Made in rust, using the Teloxide crate, and deployed using Shuttle!
-    ");
+    let about_message = String::from(r#"
+    Want to see the source code? Find it in the github repo!
+    https://github.com/JR-Bam/sssl-registry-tg-bot
+    Made in rust, using the Teloxide crate, and deployed using Shuttle!
+    "#);
 
     bot.send_message(msg.chat.id, about_message).await?;
     Ok(())
