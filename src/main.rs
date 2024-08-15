@@ -3,11 +3,13 @@ use shuttle_runtime::SecretStore;
 use teloxide::Bot;
 
 mod bot;
+mod images_handler;
 
 #[shuttle_runtime::main]
 async fn main(
     #[shuttle_runtime::Secrets] secrets: SecretStore
 ) -> Result<BotService, shuttle_runtime::Error> {
+    pretty_env_logger::init();
 
     let teloxide_key = secrets
         .get("TELOXIDE_TOKEN")

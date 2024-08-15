@@ -1,5 +1,6 @@
 use teloxide::{prelude::*, utils::command::BotCommands};
 
+use crate::images_handler::{get_animal_image, Animal};
 // Customize this struct with things from `shuttle_main` needed in `bind`,
 // such as secrets or database connections
 pub struct BotService {
@@ -32,13 +33,47 @@ enum Command {
     Help,
     #[command(description = "displays the startup message.")]
     Start,
+    #[command(
+        description = "sends a picture of a random sable (WIP)", 
+        parse_with = "split"
+    )]
+    RandomSable,
+    #[command(
+        description = "sends a picture of a random samoyed (WIP)", 
+        parse_with = "split"
+    )]
+    RandomSamoyed,
+    #[command(
+        description = "sends a picture of a random snow leopard (WIP)", 
+        parse_with = "split"
+    )]
+    RandomSnowLeopard
 }
 
 async fn answer(bot: Bot, msg: Message, cmd: Command) -> ResponseResult<()> {
-    match cmd {
-        Command::Help => bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?,
-        Command::Start => bot.send_message(msg.chat.id, "Hello Everynyan : 3!\n Type /help to get started!").await?
+    let result = match cmd {
+        Command::Help => help(&bot, &msg).await,
+        Command::Start => start(&bot, &msg).await,
+        Command::RandomSable => get_animal_image(&bot, &msg, Animal::Sable).await,
+        Command::RandomSamoyed => get_animal_image(&bot, &msg, Animal::Samoyed).await,
+        Command::RandomSnowLeopard => get_animal_image(&bot, &msg, Animal::SnowLeopard).await,
     };
+
+    if let Err(error) = result {
+        let _ = bot.send_message(msg.chat.id, "Internal Server Error: {error}. \nContact the owner to notify of the issue...").await;
+        log::error!("{error}, {}", error.to_string());
+    }
 
     Ok(())
 }
+
+async fn help(bot: &Bot, msg: &Message) -> ResponseResult<()> {
+    bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?;
+    Ok(())
+}
+
+async fn start(bot: &Bot, msg: &Message) -> ResponseResult<()> {
+    bot.send_message(msg.chat.id, "Goon day everynyan : 3!\nType /help to get started!").await?;
+    Ok(())
+}
+
