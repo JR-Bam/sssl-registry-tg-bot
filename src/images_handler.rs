@@ -13,10 +13,10 @@ pub async fn get_animal_image(bot: &Bot, msg: &Message, animal: Animal) -> Respo
     let mut image_path = PathBuf::from("images");
     match animal {
         Animal::Samoyed => {
-            image_path.push("sables");
+            image_path.push("samoyeds");
         },
         Animal::Sable => {
-            image_path.push("samoyeds");
+            image_path.push("sables");
         },
         Animal::SnowLeopard => {
             image_path.push("snowleopards");

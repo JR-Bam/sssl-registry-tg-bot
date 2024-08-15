@@ -33,18 +33,20 @@ enum Command {
     Help,
     #[command(description = "displays the startup message.")]
     Start,
+    #[command(description = "displays the technical information, such as link to github repo, etc.")]
+    About,
     #[command(
-        description = "sends a picture of a random sable (WIP)", 
+        description = "sends a picture of a random sable", 
         parse_with = "split"
     )]
     RandomSable,
     #[command(
-        description = "sends a picture of a random samoyed (WIP)", 
+        description = "sends a picture of a random samoyed", 
         parse_with = "split"
     )]
     RandomSamoyed,
     #[command(
-        description = "sends a picture of a random snow leopard (WIP)", 
+        description = "sends a picture of a random snow leopard", 
         parse_with = "split"
     )]
     RandomSnowLeopard
@@ -54,6 +56,7 @@ async fn answer(bot: Bot, msg: Message, cmd: Command) -> ResponseResult<()> {
     let result = match cmd {
         Command::Help => help(&bot, &msg).await,
         Command::Start => start(&bot, &msg).await,
+        Command::About => about(&bot, &msg).await,
         Command::RandomSable => get_animal_image(&bot, &msg, Animal::Sable).await,
         Command::RandomSamoyed => get_animal_image(&bot, &msg, Animal::Samoyed).await,
         Command::RandomSnowLeopard => get_animal_image(&bot, &msg, Animal::SnowLeopard).await,
@@ -72,7 +75,28 @@ async fn help(bot: &Bot, msg: &Message) -> ResponseResult<()> {
 }
 
 async fn start(bot: &Bot, msg: &Message) -> ResponseResult<()> {
-    bot.send_message(msg.chat.id, "Goon day everynyan : 3!\nType /help to get started!").await?;
+    let greeting_message = String::from("
+        Goon day everynyan :3\n
+        This is the SSSL Registry. Which stands for the:\n\n
+        🐕 S - Samoyed\n
+        🦦 S - Sable\n
+        🐆 SL - Snow Leopard\n
+        Registry, where you can fulfill your random SSSL needs!\n
+        To get started, simply type /help !!!
+    ");
+
+    bot.send_message(msg.chat.id, greeting_message).await?;
+    Ok(())
+}
+
+async fn about(bot: &Bot, msg: &Message) -> ResponseResult<()> {
+    let about_message = String::from("
+        Want to see the source code? Find it in the github repo!\n
+        https://github.com/JR-Bam/sssl-registry-tg-bot\n\n
+        Made in rust, using the Teloxide crate, and deployed using Shuttle!
+    ");
+
+    bot.send_message(msg.chat.id, about_message).await?;
     Ok(())
 }
 
