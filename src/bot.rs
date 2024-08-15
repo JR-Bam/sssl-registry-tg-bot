@@ -59,9 +59,8 @@ async fn answer(bot: Bot, msg: Message, cmd: Command) -> ResponseResult<()> {
         Command::RandomSnowLeopard => get_animal_image(&bot, &msg, Animal::SnowLeopard).await,
     };
 
-    if let Err(error) = result {
-        let _ = bot.send_message(msg.chat.id, "Internal Server Error: {error}. \nContact the owner to notify of the issue...").await;
-        log::error!("{error}, {}", error.to_string());
+    if let Err(_error) = result {
+        let _ = bot.send_message(msg.chat.id, "Internal Server Error: {_error}. \nContact the owner to notify of the issue...").await;
     }
 
     Ok(())
