@@ -60,7 +60,7 @@ async fn answer(bot: Bot, msg: Message, cmd: Command) -> ResponseResult<()> {
     };
 
     if let Err(_error) = result {
-        let _ = bot.send_message(msg.chat.id, "Internal Server Error: {_error}. \nContact the owner to notify of the issue...").await;
+        let _ = bot.send_message(msg.chat.id, "Internal Server Error: {_error}. \nContact the owner to notify of the issue....").await;
     }
 
     Ok(())
