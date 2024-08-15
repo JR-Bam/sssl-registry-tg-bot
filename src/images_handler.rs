@@ -1,5 +1,5 @@
-use std::path::PathBuf;
-
+use std::{fs, path::PathBuf};
+use rand::{seq::SliceRandom, thread_rng};
 use teloxide::{prelude::*, types::InputFile};
 
 
@@ -16,14 +16,30 @@ pub async fn get_animal_image(bot: &Bot, msg: &Message, animal: Animal) -> Respo
             image_path.push("sables");
         },
         Animal::Sable => {
-            image_path.push("sables");
+            image_path.push("samoyeds");
         },
         Animal::SnowLeopard => {
-            image_path.push("sables");
+            image_path.push("snowleopards");
         },
     }
 
-    image_path.push("photo_21_2024-04-10_21-21-20.jpg");
+    let photos = fs::read_dir(&image_path)?
+        .filter_map(|entry|{
+            let entry = entry.ok()?;
+            let path = entry.path();
+            let extension = path.extension()?;
+
+            if extension == "png" || extension == "jpg" || extension == "jpeg" {
+                Some(path)
+            } else {
+                None
+            }
+        })
+        .collect::<Vec<PathBuf>>();
+
+    let selected_photo = photos.choose(&mut thread_rng()).unwrap();
+    image_path.push(selected_photo.file_name().unwrap());
+
     if !image_path.exists() {
         let _ = bot.send_message(msg.chat.id, format!("Path doesn't exist: {:?}", image_path)).await?;
     } else {
